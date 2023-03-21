@@ -6,6 +6,26 @@ import TaskList from './components/TaskList/Task';
 import { Item } from './types/Item';
 
 function App() {
+  function changeDone(done: boolean, value: string) {
+    const changeValueDone = list.findIndex((item) => item.id === +value);
+    const newList = [...list];
+    newList[changeValueDone].done = done;
+    console.log(newList);
+    setList(newList);
+  }
+
+  function addTask(taskName: string) {
+    const newList = [...list];
+
+    newList.push({
+      id: list.length + 1,
+      name: taskName,
+      done: false,
+    });
+
+    setList(newList);
+  }
+
   const [list, setList] = useState<Item[]>([
     {
       id: 1,
@@ -22,8 +42,11 @@ function App() {
     <Container>
       <Area>
         <Header>PROJETO</Header>
-        <AddArea />
-        {list && list.map((item) => <TaskList key={item.id} item={item} />)}
+        <AddArea onEnter={addTask} />
+        {list &&
+          list.map((item) => (
+            <TaskList key={item.id} item={item} modifyDone={changeDone} />
+          ))}
       </Area>
     </Container>
   );
